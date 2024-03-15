@@ -29,6 +29,9 @@ const ChatApp = () => {
       if (event.ctrlKey && event.key === "j") {
         startListening();
       }
+      if (event.ctrlKey && event.key === "f") {
+        handleCameraClick();
+      }
       // You can add more shortcuts here
     };
     document.addEventListener("keydown", handleKeyDown);
