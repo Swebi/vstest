@@ -8,7 +8,6 @@ const {
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{ts,tsx,jsx}"],
-  darkMode: "class",
   theme: {
     extend: {
       animation: {

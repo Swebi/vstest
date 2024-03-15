@@ -94,17 +94,17 @@ const ChatApp = () => {
     }
   };
   return (
-    <div className="no-scrollbar">
+    <div className="no-scrollbar font-extrabold">
       <div
-        className="flex flex-col justify-between border-[0.1px] border-white/40 rounded-xl w-1/2 h-[90vh] mx-auto m-10 no-scrollbar "
+        className="flex flex-col justify-between border-[0.1px] border-white/40 rounded-xl w-1/2 h-[90vh] mx-auto m-10 no-scrollbar bg-black"
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
-        <div className="overflow-y-auto overflow-x-hidden no-scrollbar ">
+        <div className="overflow-y-auto overflow-x-hidden no-scrollbar">
           <div className="border border-white/30 w-fit mt-4 ml-4 mr-4 mb-2  p-4 rounded-2xl bg-green-500">
             Welcome To VisualSense
           </div>
-          <div className="flex flex-col justify-start items-start">
+          <div className="flex flex-col justify-start items-start bg-black">
             {imagePreview && (
               <div className="max-w-96 mb-4 ml-4 mr-4 mt-2 self-start justify-self-start ">
                 <img
@@ -148,7 +148,7 @@ const ChatApp = () => {
             placeholder="Type your prompt here"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            className="border border-white/30 px-2 py-3 mx-2 rounded-md flex-1 bg-black"
+            className="border border-white/30 px-2 py-3 mx-2 rounded-md flex-1 bg-black outline-none"
             required
           />
 
