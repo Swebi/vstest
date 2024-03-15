@@ -1,7 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { IoMdMic, IoMdSend } from "react-icons/io";
+import { IoMdCamera, IoMdMic, IoMdSend } from "react-icons/io";
 import { FaPlus } from "react-icons/fa";
+import Camera from "react-html5-camera-photo";
+import "react-html5-camera-photo/build/css/index.css";
 
 const ChatApp = () => {
   const [file, setFile] = useState(null);
@@ -9,6 +11,7 @@ const ChatApp = () => {
   const [messages, setMessages] = useState([]);
   const [imagePreview, setImagePreview] = useState(null);
   const [speechRecognition, setSpeechRecognition] = useState(null);
+  const [showCamera, setShowCamera] = useState(false);
 
   useEffect(() => {
     const recognition = new window.webkitSpeechRecognition(); // Create SpeechRecognition object
@@ -34,6 +37,16 @@ const ChatApp = () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  const handleTakePhoto = (dataUri) => {
+    setImagePreview(dataUri);
+    setFile(dataUri); // You can modify this as per your requirement //maybe in base64 need to change before sending to backend
+    setShowCamera(false); // Hide the camera after taking the photo
+  };
+
+  const handleCameraClick = () => {
+    setShowCamera(true); // Show the camera component
+  };
 
   const sendMessage = (text, isPrompt) => {
     setMessages((prevMessages) => [
@@ -104,6 +117,17 @@ const ChatApp = () => {
           <div className="border border-white/30 w-fit mt-4 ml-4 mr-4 mb-2  p-4 rounded-2xl bg-green-500">
             Welcome To VisualSense
           </div>
+          {/* Camera component */}
+          {showCamera && (
+            <div className="max-w-80 m-4">
+              <Camera
+                onTakePhoto={(dataUri) => {
+                  console.log("Photo captured in Camera:", dataUri); // Check if this log appears
+                  handleTakePhoto(dataUri);
+                }}
+              />
+            </div>
+          )}
           <div className="flex flex-col justify-start items-start bg-black">
             {imagePreview && (
               <div className="max-w-96 mb-4 ml-4 mr-4 mt-2 self-start justify-self-start ">
@@ -142,6 +166,7 @@ const ChatApp = () => {
           </div>
 
           <IoMdMic onClick={startListening} size={25} className="mx-2" />
+          <IoMdCamera onClick={handleCameraClick} size={30} className="mx-2" />
 
           <input
             type="text"
