@@ -32,53 +32,24 @@ const App = () => {
     }, delay);
 
     speakText(
-      "Please choose your type of impairment,Glaucoma,Macular Degeneration,Cataract,Diabetic Retinopathy,Achromatopsia,Absolute Blindness"
+      "Please choose your type of impairment,Glaucoma, Macular Degeneration,Cataract,Diabetic Retinopathy,Achromatopsia,Absolute Blindness"
     );
-
-    return () => clearTimeout(recognitionTimeout);
-    stopSpeech(); // Cleanup timeout on unmount
-  }, []);
-
-  useEffect(() => {
-    const handleClick = () => {
-      stopSpeech();
-    };
-
-    // Add event listener for link clicks
-    document.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", handleClick);
-    });
 
     // Cleanup function
     return () => {
-      document.querySelectorAll("a").forEach((link) => {
-        link.removeEventListener("click", handleClick);
-      });
+      clearTimeout(recognitionTimeout); // Cleanup timeout on unmount
+      stopSpeech(); // Stop speech synthesis on unmount
     };
   }, []);
 
-  const stopSpeech = () => {
-    window.speechSynthesis.cancel();
+  const speakText = (text) => {
+    const speech = new SpeechSynthesisUtterance();
+    speech.text = text;
+    window.speechSynthesis.speak(speech);
   };
 
-  const speakText = (text) => {
-    const phrases = text.split(",");
-    let currentIndex = 0;
-
-    const speakNextPhrase = () => {
-      const speech = new SpeechSynthesisUtterance();
-      speech.text = phrases[currentIndex];
-      window.speechSynthesis.speak(speech);
-
-      currentIndex++;
-
-      if (currentIndex < phrases.length) {
-        // Add a 1-second delay before speaking the next phrase
-        setTimeout(speakNextPhrase, 1500);
-      }
-    };
-
-    speakNextPhrase();
+  const stopSpeech = () => {
+    window.speechSynthesis.cancel();
   };
 
   const handleSpokenText = (spokenText) => {
@@ -122,6 +93,24 @@ const App = () => {
       }
     }
   };
+
+  // Add event listener for link clicks
+  useEffect(() => {
+    const handleClick = () => {
+      stopSpeech();
+    };
+
+    document.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", handleClick);
+    });
+
+    // Cleanup function
+    return () => {
+      document.querySelectorAll("a").forEach((link) => {
+        link.removeEventListener("click", handleClick);
+      });
+    };
+  }, []);
 
   return (
     <>
