@@ -77,7 +77,7 @@ const App = () => {
           window.location.href = "/achromatopsia";
           break;
         case "absolute blindness":
-          window.location.href = "/absolute";
+          window.location.href = "/glaucoma";
           break;
         default:
           break;
@@ -159,7 +159,7 @@ const App = () => {
                   <h1 className="text-2xl">Achromatopsia</h1>
                 </Link>
                 <Link
-                  href="/dashboard"
+                  href="/glaucoma"
                   className="flex flex-col justify-center items-center gap-4"
                 >
                   <Image
