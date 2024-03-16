@@ -80,7 +80,7 @@ const App = () => {
                   <h1 className="text-2xl">Diabetic Retinopathy</h1>
                 </Link>
                 <Link
-                  href="/dashboard"
+                  href="/achromatopsia"
                   className="flex flex-col justify-center items-center gap-4"
                 >
                   <Image
