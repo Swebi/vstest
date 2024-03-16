@@ -8,7 +8,7 @@ const App = () => {
   const [speechRecognition, setSpeechRecognition] = useState(null);
 
   useEffect(() => {
-    const delay = 11000;
+    const delay = 7000;
 
     const recognitionTimeout = setTimeout(() => {
       // Check browser support for SpeechRecognition
