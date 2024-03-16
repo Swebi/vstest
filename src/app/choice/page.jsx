@@ -8,7 +8,7 @@ const App = () => {
   const [speechRecognition, setSpeechRecognition] = useState(null);
 
   useEffect(() => {
-    const delay = 8000;
+    const delay = 11000;
 
     const recognitionTimeout = setTimeout(() => {
       // Check browser support for SpeechRecognition
@@ -30,8 +30,9 @@ const App = () => {
         alert("Speech recognition not supported in your browser.");
       }
     }, delay);
+
     speakText(
-      "Please choose your type of impairment,Glaucoma, Macular Degeneration,Cataract,Diabetic Retinopathy,Achromatopsia,Absolute Blindness"
+      "Please choose your type of impairment,Glaucoma,Macular Degeneration,Cataract,Diabetic Retinopathy,Achromatopsia,Absolute Blindness"
     );
 
     return () => clearTimeout(recognitionTimeout);
@@ -61,9 +62,23 @@ const App = () => {
   };
 
   const speakText = (text) => {
-    const speech = new SpeechSynthesisUtterance();
-    speech.text = text;
-    window.speechSynthesis.speak(speech);
+    const phrases = text.split(",");
+    let currentIndex = 0;
+
+    const speakNextPhrase = () => {
+      const speech = new SpeechSynthesisUtterance();
+      speech.text = phrases[currentIndex];
+      window.speechSynthesis.speak(speech);
+
+      currentIndex++;
+
+      if (currentIndex < phrases.length) {
+        // Add a 1-second delay before speaking the next phrase
+        setTimeout(speakNextPhrase, 1500);
+      }
+    };
+
+    speakNextPhrase();
   };
 
   const handleSpokenText = (spokenText) => {
