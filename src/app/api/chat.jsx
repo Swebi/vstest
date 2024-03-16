@@ -11,6 +11,7 @@ const ChatApp = () => {
   const [speechRecognition, setSpeechRecognition] = useState(null);
   const [cameraStream, setCameraStream] = useState(null);
   const [showCamera, setShowCamera] = useState(false); // Define showCamera state
+  const [speaking, setSpeaking] = useState(false); // State to manage speech synthesis
 
   const [cameraVideoElement, setCameraVideoElement] = useState(null);
 
@@ -102,6 +103,21 @@ const ChatApp = () => {
     ]);
   };
 
+  const speakText = (text) => {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    // Set additional properties for the utterance if needed
+    // utterance.voice = ...
+
+    synth.speak(utterance);
+    setSpeaking(true);
+
+    utterance.onend = () => {
+      setSpeaking(false);
+    };
+  };
+
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
@@ -150,6 +166,8 @@ const ChatApp = () => {
         console.log(data);
         // Handle the response data as needed
         sendMessage(data, false);
+        speakText(data); // Speak the response text
+
       } catch (error) {
         console.error("Error:", error);
       }
