@@ -269,7 +269,7 @@ const Achromatopsia = () => {
             placeholder="Type your prompt here"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            className="border border-white/30 px-2 py-3 mx-2 rounded-md flex-1 bg-black outline-none"
+            className="border border-white/30 px-2 py-3 mx-2 rounded-md flex-1 bg-black text-white outline-none"
             required
           />
 

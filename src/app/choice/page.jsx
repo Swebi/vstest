@@ -57,6 +57,8 @@ const App = () => {
     );
 
     if (spokenChoice) {
+      window.speechSynthesis.cancel();
+
       // Navigate to the corresponding link
       switch (spokenChoice) {
         case "glaucoma":

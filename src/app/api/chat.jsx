@@ -197,9 +197,9 @@ const ChatApp = () => {
   };
 
   return (
-    <div className="no-scrollbar overflow-hidden font-medium">
+    <div className="no-scrollbar overflow-hidden font-extrabold">
       <div
-        className="flex flex-col justify-between border border-gray-400 rounded-xl w-1/2 h-[90vh] mx-auto m-10 no-scrollbar bg-white text-black"
+        className="flex flex-col justify-between border-[0.1px] border-white/40 rounded-xl w-1/2 h-[90vh] mx-auto m-10 no-scrollbar bg-black"
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
@@ -246,7 +246,7 @@ const ChatApp = () => {
             ))}
           </div>
         </div>
-        <div className="flex justify-evenly items-center justify-self-end border-t border-gray-400 p-5 h-fit">
+        <div className="flex justify-evenly items-center justify-self-end  border-t-[0.1px]  border-white/40 p-5 h-fit">
           <div className="flex items-center justify-center">
             <input
               type="file"
