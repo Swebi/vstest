@@ -12,6 +12,7 @@ const ChatApp = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [speechRecognition, setSpeechRecognition] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
+  const [isListening, setIsListening] = useState(false); // Define isListening state
 
   useEffect(() => {
     const recognition = new window.webkitSpeechRecognition(); // Create SpeechRecognition object
@@ -103,12 +104,19 @@ const ChatApp = () => {
   };
 
   const startListening = () => {
-    if (speechRecognition) {
-      speechRecognition.start(); // Start speech recognition
+    if (speechRecognition && !isListening) {
+      try {
+        speechRecognition.start();
+        setIsListening(true);
+      } catch (error) {
+        console.error("Error starting speech recognition:", error);
+        // Handle the error silently
+      }
     } else {
-      alert("Speech recognition not supported in this browser.");
+      alert("Speech recognition is already in progress.");
     }
   };
+
   return (
     <div className="no-scrollbar font-extrabold">
       <div
