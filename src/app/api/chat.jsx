@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { IoMdCamera, IoMdMic, IoMdSend } from "react-icons/io";
 import { FaPlus } from "react-icons/fa";
 import Camera from "react-html5-camera-photo";
@@ -12,7 +12,6 @@ const ChatApp = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [speechRecognition, setSpeechRecognition] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
-  const [isListening, setIsListening] = useState(false); // Define isListening state
 
   useEffect(() => {
     const recognition = new window.webkitSpeechRecognition(); // Create SpeechRecognition object
@@ -28,12 +27,13 @@ const ChatApp = () => {
     const handleKeyDown = (event) => {
       // Check for Alt + J shortcut
       if (event.ctrlKey && event.key === "j") {
-        startListening();
       }
       if (event.ctrlKey && event.key === "f") {
         handleCameraClick();
       }
-      // You can add more shortcuts here
+      if (event.key === "Enter") {
+        handleUpload(); // Call handleUpload function when Enter key is pressed
+      }
     };
     document.addEventListener("keydown", handleKeyDown);
 
@@ -44,6 +44,7 @@ const ChatApp = () => {
 
   const handleTakePhoto = (dataUri) => {
     setImagePreview(dataUri);
+
     setFile(dataUri); // You can modify this as per your requirement //maybe in base64 need to change before sending to backend
     setShowCamera(false); // Hide the camera after taking the photo
   };
@@ -78,14 +79,35 @@ const ChatApp = () => {
     if (!file) {
       alert("Please select an image first.");
       return;
+    } else {
+      const myprompt = prompt;
+
+      sendMessage(myprompt, true); // Send user prompt
+      // sendMessage(text, false); // Send AI response
+      // setFile(null);
+      // setImagePreview(null);
+
+      const formData = new FormData();
+      formData.append("image_file", file);
+      console.log("file done");
+
+      try {
+        const response = await fetch(
+          `http://localhost:8000/predict/?text=${encodeURIComponent(myprompt)}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const data = await response.json();
+        console.log(data);
+        // Handle the response data as needed
+        sendMessage(data, false);
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
-
-    const myprompt = prompt;
-
-    sendMessage(myprompt, true); // Send user prompt
-    // sendMessage(text, false); // Send AI response
-    // setFile(null);
-    // setImagePreview(null);
   };
 
   const handleDrop = (event) => {
@@ -104,16 +126,10 @@ const ChatApp = () => {
   };
 
   const startListening = () => {
-    if (speechRecognition && !isListening) {
-      try {
-        speechRecognition.start();
-        setIsListening(true);
-      } catch (error) {
-        console.error("Error starting speech recognition:", error);
-        // Handle the error silently
-      }
+    if (speechRecognition) {
+      speechRecognition.start();
     } else {
-      alert("Speech recognition is already in progress.");
+      alert("Speech recognition not supported in this browser.");
     }
   };
 

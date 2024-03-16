@@ -1,8 +1,7 @@
 // App.js
 import React from "react";
 import ChatApp from "@/app/api/chat";
-import { DotBackgroundDemo } from "@/components/ui/dot-background";
-import CustomErrorBoundary from "@/components/ui/customErrorBoundary";
+
 const App = () => {
   return (
     <div className="relative">
