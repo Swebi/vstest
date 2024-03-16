@@ -5,18 +5,83 @@ import { LampContainer } from "@/components/ui/lamp";
 import Link from "next/link";
 
 const App = () => {
-  useEffect(() => {
-    // Function to speak text
-    const speakText = (text) => {
-      const speech = new SpeechSynthesisUtterance();
-      speech.text = text;
-      window.speechSynthesis.speak(speech);
-    };
+  const [speechRecognition, setSpeechRecognition] = useState(null);
 
+  useEffect(() => {
+    const delay = 8000;
+
+    const recognitionTimeout = setTimeout(() => {
+      // Check browser support for SpeechRecognition
+      if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+        const recognition = new (window.SpeechRecognition ||
+          window.webkitSpeechRecognition)();
+        recognition.continuous = false;
+        recognition.lang = "en-US";
+
+        recognition.onresult = (event) => {
+          const spokenText = event.results[0][0].transcript.toLowerCase();
+          handleSpokenText(spokenText);
+        };
+
+        setSpeechRecognition(recognition);
+
+        recognition.start();
+      } else {
+        alert("Speech recognition not supported in your browser.");
+      }
+    }, delay);
     speakText(
       "Please choose your type of impairment,Glaucoma, Macular Degeneration,Cataract,Diabetic Retinopathy,Achromatopsia,Absolute Blindness"
     );
+
+    return () => clearTimeout(recognitionTimeout); // Cleanup timeout on unmount
   }, []);
+
+  const speakText = (text) => {
+    const speech = new SpeechSynthesisUtterance();
+    speech.text = text;
+    window.speechSynthesis.speak(speech);
+  };
+
+  const handleSpokenText = (spokenText) => {
+    const choices = [
+      "glaucoma",
+      "macular degeneration",
+      "cataract",
+      "diabetic retinopathy",
+      "achromatopsia",
+      "absolute blindness",
+    ];
+    const spokenChoice = choices.find((choice) =>
+      spokenText.includes(choice.toLowerCase())
+    );
+
+    if (spokenChoice) {
+      // Navigate to the corresponding link
+      switch (spokenChoice) {
+        case "glaucoma":
+          window.location.href = "/glaucoma";
+          break;
+        case "macular degeneration":
+          window.location.href = "/macular-deg";
+          break;
+        case "cataract":
+          window.location.href = "/cataract";
+          break;
+        case "diabetic retinopathy":
+          window.location.href = "/diabetic";
+          break;
+        case "achromatopsia":
+          window.location.href = "/achromatopsia";
+          break;
+        case "absolute blindness":
+          window.location.href = "/absolute";
+          break;
+        default:
+          break;
+      }
+    }
+  };
 
   return (
     <>
