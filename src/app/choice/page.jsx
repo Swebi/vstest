@@ -34,8 +34,31 @@ const App = () => {
       "Please choose your type of impairment,Glaucoma, Macular Degeneration,Cataract,Diabetic Retinopathy,Achromatopsia,Absolute Blindness"
     );
 
-    return () => clearTimeout(recognitionTimeout); // Cleanup timeout on unmount
+    return () => clearTimeout(recognitionTimeout);
+    stopSpeech(); // Cleanup timeout on unmount
   }, []);
+
+  useEffect(() => {
+    const handleClick = () => {
+      stopSpeech();
+    };
+
+    // Add event listener for link clicks
+    document.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", handleClick);
+    });
+
+    // Cleanup function
+    return () => {
+      document.querySelectorAll("a").forEach((link) => {
+        link.removeEventListener("click", handleClick);
+      });
+    };
+  }, []);
+
+  const stopSpeech = () => {
+    window.speechSynthesis.cancel();
+  };
 
   const speakText = (text) => {
     const speech = new SpeechSynthesisUtterance();
@@ -57,7 +80,7 @@ const App = () => {
     );
 
     if (spokenChoice) {
-      window.speechSynthesis.cancel();
+      stopSpeech(); // Stop speech synthesis before navigating
 
       // Navigate to the corresponding link
       switch (spokenChoice) {
